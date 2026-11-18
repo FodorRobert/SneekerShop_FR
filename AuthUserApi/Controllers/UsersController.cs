@@ -123,7 +123,10 @@ namespace AuthUserApi.Controllers
         public async Task<IActionResult> Login([FromBody] UserLoginDTO userLoginDTO)
         {
             var login = await _context.Users.SingleOrDefaultAsync(u => u.Name == userLoginDTO.Name && u.Password == userLoginDTO.Password);
-            if (login is null) return StatusCode(404, new { message = "Nincs találat", result = login });
+            if (login is null)
+            {
+                return StatusCode(404, new { message = "Nincs találat", result = login });
+            }
             var isValid = _password.Verify(userLoginDTO.Password!, login.Password!, login.Salt!);
             if (isValid) 
             {
